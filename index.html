@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Stress Detector - Live Event Tracking</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>🌡️ Heat Stress Detector</h1>
+                    <p class="subtitle">Real-Time Equipment Monitoring Dashboard</p>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Active Equipment</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Critical Alerts</span>
+                        <span class="stat-value alert-count" id="stat-alerts">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Update</span>
+                        <span class="stat-value" id="stat-time">--:--:--</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <button class="btn btn-primary" id="btn-add-equipment">+ Add Equipment</button>
+            <button class="btn btn-secondary" id="btn-cleanup">🗑️ Cleanup Old Logs</button>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search equipment...">
+            </div>
+        </div>
+
+        <!-- Equipment Grid -->
+        <div class="equipment-grid" id="equipment-grid">
+            <div class="loading-message">
+                <p>Loading equipment data...</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="status-item">
+                <span class="status-dot normal"></span>
+                <span>Normal</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot warning"></span>
+                <span>Warning (90%+ threshold)</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot alert"></span>
+                <span>Critical Alert (Over threshold)</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal: Add Equipment -->
+    <div id="modal-add-equipment" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Equipment</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="form-add-equipment" class="modal-form">
+                <div class="form-group">
+                    <label for="input-eq-name">Equipment Name *</label>
+                    <input 
+                        type="text" 
+                        id="input-eq-name" 
+                        name="name" 
+                        placeholder="e.g., Industrial Motor A" 
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="input-max-temp">Max Temp Threshold (°C) *</label>
+                    <input 
+                        type="number" 
+                        id="input-max-temp" 
+                        name="max_temp_threshold" 
+                        placeholder="e.g., 85.0" 
+                        step="0.1"
+                        required
+                    >
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Equipment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Equipment -->
+    <div id="modal-edit-equipment" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Equipment</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="form-edit-equipment" class="modal-form">
+                <input type="hidden" id="edit-equipment-id">
+                <div class="form-group">
+                    <label for="edit-eq-name">Equipment Name</label>
+                    <input 
+                        type="text" 
+                        id="edit-eq-name" 
+                        name="name" 
+                        placeholder="Equipment name"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="edit-max-temp">Max Temp Threshold (°C)</label>
+                    <input 
+                        type="number" 
+                        id="edit-max-temp" 
+                        name="max_temp_threshold" 
+                        placeholder="e.g., 85.0" 
+                        step="0.1"
+                    >
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Equipment Details -->
+    <div id="modal-equipment-details" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detail-equipment-name">Equipment Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Equipment ID:</span>
+                        <span class="detail-value" id="detail-eq-id">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Max Threshold:</span>
+                        <span class="detail-value" id="detail-max-temp">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Current Temperature:</span>
+                        <span class="detail-value" id="detail-current-temp">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Last Updated:</span>
+                        <span class="detail-value" id="detail-timestamp">-</span>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3>Recent Readings (Last 10)</h3>
+                    <div class="readings-list" id="detail-readings-list">
+                        <p class="no-data">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-cancel">Close</button>
+                <button class="btn btn-primary" id="btn-edit-from-detail">Edit Equipment</button>
+                <button class="btn btn-danger" id="btn-delete-from-detail">Delete Equipment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="./main/script.js"></script>
+</body>
+</html>
