@@ -5,7 +5,7 @@ A professional real-time heat stress monitoring system for industrial equipment 
 
 ---
 
-## 📋 Project Structure
+## Project Structure
 
 ```
 heat-stress-detector/
@@ -21,7 +21,7 @@ heat-stress-detector/
 
 ---
 
-## 🔧 Prerequisites
+## Prerequisites
 
 - **Python 3.8+**
 - **MySQL 5.7+ or MariaDB 10.3+**
@@ -30,7 +30,7 @@ heat-stress-detector/
 
 ---
 
-## 📦 Installation & Setup
+## Installation & Setup
 
 ### Step 1: Clone/Download Project Files
 
@@ -123,7 +123,7 @@ DB_CONFIG = {
 
 ---
 
-## 🚀 Running the Application
+## Running the Application
 
 ### Development Mode
 
@@ -149,7 +149,7 @@ waitress-serve --port=5000 app:app
 
 ---
 
-## 📊 API Endpoints
+## API Endpoints
 
 ### Equipment Management
 
@@ -207,7 +207,7 @@ curl -X DELETE http://localhost:5000/api/telemetry/cleanup
 
 ---
 
-## 🎨 Frontend Features
+## Frontend Features
 
 ### Dashboard Interface
 - **Live Equipment Tracking**: Real-time temperature monitoring with 3-second poll intervals
@@ -228,7 +228,7 @@ curl -X DELETE http://localhost:5000/api/telemetry/cleanup
 
 ---
 
-## 🧪 Testing the Application
+## Testing the Application
 
 ### Test with Sample Data
 
@@ -261,7 +261,7 @@ INSERT INTO Telemetry (Equipment_ID, Current_Temp) VALUES
 
 ---
 
-## 🔐 Security Considerations
+## Security Considerations
 
 ### Production Deployment
 
@@ -301,7 +301,7 @@ pip install Flask-Limiter
 
 ---
 
-## 📈 Database Maintenance
+## Database Maintenance
 
 ### Regular Cleanup
 
@@ -330,7 +330,7 @@ mysql -u root -p heat_stress_db < backup.sql
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: "Connection refused" error
 
@@ -374,7 +374,7 @@ python app.py
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 ### Backend (Flask)
 - RESTful API endpoints for CRUD operations
@@ -407,13 +407,13 @@ python app.py
 
 ---
 
-## 📝 License
+## License
 
 This project is provided as-is for educational purposes.
 
 ---
 
-## 🤝 Support
+## Support
 
 For issues or questions:
 1. Check the Troubleshooting section
@@ -423,7 +423,7 @@ For issues or questions:
 
 ---
 
-## 📋 Deployment Checklist
+## Deployment Checklist
 
 - [ ] Database created and schema loaded
 - [ ] Virtual environment created and activated
