@@ -1,5 +1,4 @@
 # Heat Stress Detector Web Dashboard
-## Complete Setup and Deployment Guide
 
 We developed and implemented a cloud-based IoT telemetry system designed for monitoring, analyzing, and predicting thermal failures in industrial equipment. The system uses a Python (Flask) backend and a MySQL database, with a vanilla JavaScript frontend. It processes continuous temperature streams to dynamically assess equipment health. By applying predictive anomaly detection using the dT/dt method, the dashboard can spot rapid heating events and sends automated email alerts to prevent physical damage. The entire platform runs on a secured Linux virtual machine set up with systemd, ensuring maximum resilience and continuous operation.
 
