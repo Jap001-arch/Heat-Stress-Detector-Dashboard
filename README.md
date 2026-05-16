@@ -8,14 +8,14 @@ We developed and implemented a cloud-based IoT telemetry system designed for mon
 
 ```
 heat-stress-detector/
-├── app_v2.py                      # Flask backend application
-├── sensor_sim.py               # Temp Sensor Simulator
-├── allInOne.sql                  # MySQL database schema
+├── app_v2.py                                    # Flask backend application
+├── sensor_sim.py                                # Temp Sensor Simulator
+├── allInOne.sql                                 # MySQL database schema
 ├── templates/
 │   └── heat_stress_detector_v2.html             # Main dashboard HTML
 └── static/
-    ├── style_v2.css              # Professional dark theme CSS
-    └── script.js              # Real-time dashboard JavaScript
+    ├── style_v2.css                             # Professional dark theme CSS
+    └── script.js                                # Real-time dashboard JavaScript
 ```
 
 ---
