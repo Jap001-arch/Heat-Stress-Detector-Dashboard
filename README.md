@@ -29,180 +29,276 @@ heat-stress-detector/
 
 ---
 
-## Installation & Setup
+# Heat Stress Detection Dashboard (HSDD) - Process Documentation
 
-### Step 1: Clone/Download Project Files
+## Overview
+This documentation outlines the complete setup process for the Heat Stress Detection Dashboard system, including server configuration, frontend development, backend implementation, and security setup.
 
+---
+
+## Initial Server Setup
+
+### 1. Create a New Server
+Create a new server for the system with the following network configuration:
+
+**Network Configuration:**
+- Switch the network setting to **Bridge Adapter** to ensure both internet access and reachability from your host machine.
+
+---
+
+## Pre-Installation and Remote Access
+
+### 2. Prepare for Remote Access
+
+Update system packages:
 ```bash
-# Create project directory
-mkdir heat-stress-detector
-cd heat-stress-detector
-
-# Copy all files from the provided source into this directory
+sudo apt update
 ```
 
-### Step 2: Create Python Virtual Environment
-
+Install OpenSSH server for remote access:
 ```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
+sudo apt install openssh-server
 ```
 
-### Step 3: Install Python Dependencies
-
+Connect to the server remotely:
 ```bash
-pip install -r requirements.txt
-```
-
-### Step 4: Setup MySQL Database
-
-#### Option A: Using MySQL Command Line
-
-```bash
-# Login to MySQL
-mysql -u root -p
-
-# Run the schema script
-source /path/to/schema.sql
-
-# Or manually execute:
-CREATE DATABASE IF NOT EXISTS heat_stress_db;
-USE heat_stress_db;
-
-CREATE TABLE IF NOT EXISTS Equipment (
-    Equipment_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Max_Temp_Threshold FLOAT NOT NULL,
-    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_name (Name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS Telemetry (
-    Log_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Equipment_ID INT NOT NULL,
-    Current_Temp FLOAT NOT NULL,
-    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_equipment_telemetry 
-        FOREIGN KEY (Equipment_ID) 
-        REFERENCES Equipment(Equipment_ID) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE,
-    INDEX idx_equipment_id (Equipment_ID),
-    INDEX idx_timestamp (Timestamp)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
-
-#### Option B: Using MySQL Workbench
-
-1. Open MySQL Workbench
-2. Connect to your MySQL server
-3. Go to File → Open SQL Script
-4. Select `schema.sql`
-5. Click Execute (⚡ icon)
-
-### Step 5: Configure Database Connection
-
-Edit `app.py` and update the `DB_CONFIG` dictionary:
-
-```python
-DB_CONFIG = {
-    'host': 'localhost',           # Your MySQL host
-    'user': 'root',                # Your MySQL username
-    'password': 'your_password',   # Your MySQL password
-    'database': 'heat_stress_db',  # Database name
-    'port': 3306                   # MySQL port (default: 3306)
-}
+ssh shoiming@our_server_ip
 ```
 
 ---
 
-## Running the Application
+## System Dependencies Installation
 
-### Development Mode
+### 3. Install Core Services
 
+Install Apache web server and MySQL database server:
 ```bash
-# Activate virtual environment (if not already active)
-source venv/bin/activate
-
-# Run Flask development server
-python app.py
+sudo apt install apache2 mysql-server -y
 ```
 
-The application will be available at: `http://localhost:5000`
+**Purpose:** Prepare the installation process for the Apache server, MySQL database server, Python package manager, Flask, mysql-connector-python, and Flask-CORS.
 
-### Production Mode (Recommended)
+### 4. Verify Installation
 
+Check MySQL installation and status:
 ```bash
-# Using Gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
+mysql --version && sudo systemctl status mysql
+```
 
-# Or using Waitress
-waitress-serve --port=5000 app:app
+Check Apache installation and status:
+```bash
+apache2 -v && sudo systemctl status apache2
+```
+
+### 5. Install Python and Dependencies
+
+Install Python pip:
+```bash
+sudo apt update && sudo apt install python3-pip -y
+```
+
+Install Python packages:
+```bash
+pip install flask mysql-connector-python flask-cors --break-system-packages
 ```
 
 ---
 
-## API Endpoints
+## User Configuration
 
-### Equipment Management
+### 6. Create and Configure User
 
-#### Create Equipment (POST)
+Add a new user:
 ```bash
-curl -X POST http://localhost:5000/api/equipment \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Industrial Motor A",
-    "max_temp_threshold": 85.0
-  }'
+sudo adduser new_user
 ```
 
-#### Get All Equipment (GET)
+Set ownership for web directory:
 ```bash
-curl http://localhost:5000/api/equipment
+sudo chown -R new_user:new_user /var/www/html
 ```
 
-#### Get Equipment Details (GET)
+---
+
+## Part I. Building the Frontend (HTML, CSS and Vanilla JS)
+
+### 7. Create Frontend Files
+
+Create the main HTML file:
 ```bash
-curl http://localhost:5000/api/equipment/1
+sudo nano /var/www/html/heat_stress_detector_v2.html
 ```
 
-#### Update Equipment (PUT)
+Create the CSS stylesheet:
 ```bash
-curl -X PUT http://localhost:5000/api/equipment/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Updated Motor Name",
-    "max_temp_threshold": 90.0
-  }'
+sudo nano /var/www/html/style.css
 ```
 
-#### Delete Equipment (DELETE)
+Create the JavaScript file:
 ```bash
-curl -X DELETE http://localhost:5000/api/equipment/1
+sudo nano /var/www/html/script_v2.js
 ```
 
-### Telemetry Management
+---
 
-#### Add Temperature Reading (POST)
+## Database Setup
+
+### 8. Configure MySQL Database
+
+Access MySQL:
 ```bash
-curl -X POST http://localhost:5000/api/telemetry \
-  -H "Content-Type: application/json" \
-  -d '{
-    "equipment_id": 1,
-    "current_temp": 82.5
-  }'
+sudo mysql -u root -p
 ```
 
-#### Cleanup Old Logs (DELETE)
+---
+
+## Part II. Choosing the Python Framework (Flask)
+
+### 9. Setup Flask Application
+
+Create project directory:
 ```bash
-curl -X DELETE http://localhost:5000/api/telemetry/cleanup
+mkdir ~/heat_stress_detector && cd ~/heat_stress_detector
 ```
+
+Create the main Flask application:
+```bash
+sudo nano app_v2.py
+```
+
+Create the sensor simulator:
+```bash
+sudo nano sensor.sim.py
+```
+
+---
+
+## Part III. Self-Hosted Dashboard System
+
+### 10. Configure Systemd Services
+
+Create service file for the Heat Stress Detector:
+```bash
+sudo nano /etc/systemd/system/heatstressdetector.service
+```
+
+Create service file for the Sensor Simulator:
+```bash
+sudo nano /etc/systemd/system/sensorsimulator.service
+```
+
+### 11. Enable and Start Services
+
+Reload systemd daemon:
+```bash
+sudo systemctl daemon-reload
+```
+
+Enable services to start on boot:
+```bash
+sudo systemctl enable heatstressdetector
+sudo systemctl enable sensorsimulator
+```
+
+Start the services:
+```bash
+sudo systemctl start heatstressdetector
+sudo systemctl start sensorsimulator
+```
+
+---
+
+## PART IV. Security Setup
+
+### 12. Configure Firewall (UFW)
+
+Allow SSH access:
+```bash
+sudo ufw allow 22/tcp
+```
+
+Allow HTTP access:
+```bash
+sudo ufw allow 80/tcp
+```
+
+Allow Flask application access:
+```bash
+sudo ufw allow 5000/tcp
+```
+
+Enable the firewall:
+```bash
+sudo ufw enable
+```
+
+---
+
+## PART V. Test Resilience
+
+### 13. System Reboot Test
+
+Reboot the system to test service persistence:
+```bash
+sudo reboot
+```
+
+After reboot, verify that all services start automatically and the system is fully operational.
+
+---
+
+## Notes
+
+- Ensure all commands are executed with appropriate permissions
+- Replace `our_server_ip` with your actual server IP address
+- Replace `shoiming` with your actual username
+- Verify service status after each major step
+- Keep track of database credentials and user passwords securely
+
+---
+
+## Service Verification Commands
+
+After setup, use these commands to verify services are running:
+
+```bash
+# Check Apache status
+sudo systemctl status apache2
+
+# Check MySQL status
+sudo systemctl status mysql
+
+# Check Heat Stress Detector service
+sudo systemctl status heatstressdetector
+
+# Check Sensor Simulator service
+sudo systemctl status sensorsimulator
+
+# Check firewall status
+sudo ufw status
+```
+
+---
+
+## Troubleshooting
+
+If services fail to start:
+
+1. Check service logs:
+   ```bash
+   sudo journalctl -u heatstressdetector
+   sudo journalctl -u sensorsimulator
+   ```
+
+2. Verify file permissions in `/var/www/html`
+
+3. Ensure all Python dependencies are installed correctly
+
+4. Check Apache and MySQL error logs:
+   ```bash
+   sudo tail -f /var/log/apache2/error.log
+   sudo tail -f /var/log/mysql/error.log
+   ```
 
 ---
 
