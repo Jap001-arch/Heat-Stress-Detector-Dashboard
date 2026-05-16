@@ -1,7 +1,8 @@
-# Heat Stress Detector Web Dashboard
+# Heat Stress Detection Dashboard (HSDD) - Process Documentation
 
+## Overview
 We developed and implemented a cloud-based IoT telemetry system designed for monitoring, analyzing, and predicting thermal failures in industrial equipment. The system uses a Python (Flask) backend and a MySQL database, with a vanilla JavaScript frontend. It processes continuous temperature streams to dynamically assess equipment health. By applying predictive anomaly detection using the dT/dt method, the dashboard can spot rapid heating events and sends automated email alerts to prevent physical damage. The entire platform runs on a secured Linux virtual machine set up with systemd, ensuring maximum resilience and continuous operation.
-
+This documentation outlines the complete setup process for the Heat Stress Detection Dashboard system, including server configuration, frontend development, backend implementation, and security setup.
 ---
 
 ## Project Structure
@@ -20,19 +21,12 @@ heat-stress-detector/
 
 ---
 
-## Prerequisites
+## Requirements
 
 - **Python 3.8+**
 - **MySQL 5.7+ or MariaDB 10.3+**
 - **pip** (Python package manager)
 - **Git** (optional, for version control)
-
----
-
-# Heat Stress Detection Dashboard (HSDD) - Process Documentation
-
-## Overview
-This documentation outlines the complete setup process for the Heat Stress Detection Dashboard system, including server configuration, frontend development, backend implementation, and security setup.
 
 ---
 
@@ -280,28 +274,6 @@ sudo ufw status
 
 ---
 
-## Troubleshooting
-
-If services fail to start:
-
-1. Check service logs:
-   ```bash
-   sudo journalctl -u heatstressdetector
-   sudo journalctl -u sensorsimulator
-   ```
-
-2. Verify file permissions in `/var/www/html`
-
-3. Ensure all Python dependencies are installed correctly
-
-4. Check Apache and MySQL error logs:
-   ```bash
-   sudo tail -f /var/log/apache2/error.log
-   sudo tail -f /var/log/mysql/error.log
-   ```
-
----
-
 ## Frontend Features
 
 ### Dashboard Interface
@@ -340,23 +312,6 @@ INSERT INTO Telemetry (Equipment_ID, Current_Temp) VALUES
 (2, 88.3),
 (3, 73.2);
 ```
-
-### Manual Testing Steps
-
-1. Open `http://localhost:5000` in your browser
-2. Click "Add Equipment" and create a test device
-3. Use the API to add temperature readings:
-   ```bash
-   curl -X POST http://localhost:5000/api/telemetry \
-     -H "Content-Type: application/json" \
-     -d '{"equipment_id": 1, "current_temp": 85.5}'
-   ```
-4. Watch the dashboard update in real-time
-5. Test alert triggering by exceeding max temperature
-
----
-
-## Security Considerations
 
 ### Production Deployment
 
@@ -466,31 +421,6 @@ export FLASK_ENV=development
 export FLASK_DEBUG=1
 python app.py
 ```
-
----
-
-## Documentation
-
-### Backend (Flask)
-- RESTful API endpoints for CRUD operations
-- Automatic error handling with HTTP status codes
-- Input validation for all user inputs
-- Logging for debugging and monitoring
-- Database transactions for data integrity
-
-### Frontend (JavaScript)
-- Fetch API for non-blocking requests
-- Event-driven architecture
-- Modal dialogs for user interactions
-- Real-time polling (3-second intervals)
-- Responsive grid layout
-
-### Database
-- Foreign key constraints for integrity
-- Automatic timestamps
-- Composite indexes for performance
-- Unicode support for international text
-
 ---
 
 ## 🎓 Learning Resources
@@ -518,21 +448,14 @@ For issues or questions:
 
 ---
 
-## Deployment Checklist
 
-- [ ] Database created and schema loaded
-- [ ] Virtual environment created and activated
-- [ ] Dependencies installed (requirements.txt)
-- [ ] Database credentials configured in app.py
-- [ ] MySQL service running
-- [ ] Flask app runs without errors: `python app.py`
-- [ ] Dashboard loads at http://localhost:5000
-- [ ] Can add equipment via UI
-- [ ] Can add telemetry via API
-- [ ] Real-time updates working (3-second refresh)
-- [ ] Alerts trigger when temp exceeds threshold
-- [ ] Notifications display correctly
-- [ ] Search functionality works
-- [ ] Edit and delete operations work
+## Contributors
+DREAM TEAM Sa Cloud members:
+1. Carandang Serrano Banjo
+2. Hkawng Zam Jap
+3. Isid De Torres
+4. Joshua Garcia
+5. Reighnard Glorioso
 
 ---
+
