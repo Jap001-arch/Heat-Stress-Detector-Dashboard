@@ -1,0 +1,25 @@
+[Unit]
+Description=Heat Stress Detecting Dashboard
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=shoiming
+Group=shoiming
+WorkingDirectory=/home/shoiming/heat_stress_detector_app
+
+Environment="ALERT_EMAIL_SENDER=batstate.heatmonitor101@gmail.com"
+Environment="ALERT_EMAIL_PASSWORD=rviszxwzfguyxcjt" 
+Environment="ALERT_RECIPIENTS=24-04838@g.batstate-u.edu.ph@gmail.com" 
+
+ExecStart=/usr/bin/python3 /home/shoiming/heat_stress_detector_app/app_v2.py
+
+Restart=always
+RestartSec=10
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=heat-detector
+
+WantedBy=multi-user.target

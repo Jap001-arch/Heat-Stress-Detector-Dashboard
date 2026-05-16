@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heat Stress Detector - Live Event Tracking</title>
+    <title>Heat Stress Detector v2 - Advanced Monitoring</title>
     <link rel="stylesheet" href="./style.css">
+    <!-- Feature 1: Chart.js for Historical Trend Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -12,8 +14,8 @@
         <header class="header">
             <div class="header-content">
                 <div class="header-title">
-                    <h1>🌡️ Heat Stress Detector</h1>
-                    <p class="subtitle">Real-Time Equipment Monitoring Dashboard</p>
+                    <h1>🌡️ Heat Stress Detector v2.0</h1>
+                    <p class="subtitle">Advanced Real-Time Equipment Monitoring with Predictive Alerts</p>
                 </div>
                 <div class="header-stats">
                     <div class="stat-item">
@@ -23,6 +25,10 @@
                     <div class="stat-item">
                         <span class="stat-label">Critical Alerts</span>
                         <span class="stat-value alert-count" id="stat-alerts">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Rapid Heating Detected</span>
+                        <span class="stat-value warning-count" id="stat-rapid-heat">0</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Last Update</span>
@@ -36,6 +42,8 @@
         <div class="control-panel">
             <button class="btn btn-primary" id="btn-add-equipment">+ Add Equipment</button>
             <button class="btn btn-secondary" id="btn-cleanup">🗑️ Cleanup Old Logs</button>
+            <!-- Feature 4: CSV Export Button -->
+            <button class="btn btn-success" id="btn-export-csv">📥 Export to CSV</button>
             <div class="search-box">
                 <input type="text" id="search-input" placeholder="Search equipment...">
             </div>
@@ -63,10 +71,14 @@
                 <span class="status-dot alert"></span>
                 <span>Critical Alert (Over threshold)</span>
             </div>
+            <div class="status-item">
+                <span class="status-dot rapid"></span>
+                <span>Rapid Heating Detected</span>
+            </div>
         </footer>
     </div>
 
-    <!-- Modal: Add Equipment -->
+    <!-- Modal: Add Equipment (Feature 5: Location input added) -->
     <div id="modal-add-equipment" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -92,6 +104,17 @@
                         name="max_temp_threshold" 
                         placeholder="e.g., 85.0" 
                         step="0.1"
+                        required
+                    >
+                </div>
+                <!-- Feature 5: Location field -->
+                <div class="form-group">
+                    <label for="input-location">Location *</label>
+                    <input 
+                        type="text" 
+                        id="input-location" 
+                        name="location" 
+                        placeholder="e.g., Server Room A" 
                         required
                     >
                 </div>
@@ -131,6 +154,16 @@
                         step="0.1"
                     >
                 </div>
+                <!-- Feature 5: Location field in edit -->
+                <div class="form-group">
+                    <label for="edit-location">Location</label>
+                    <input 
+                        type="text" 
+                        id="edit-location" 
+                        name="location" 
+                        placeholder="e.g., Server Room A"
+                    >
+                </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -139,9 +172,9 @@
         </div>
     </div>
 
-    <!-- Modal: Equipment Details -->
+    <!-- Modal: Equipment Details with Trend Chart (Feature 1) -->
     <div id="modal-equipment-details" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <div class="modal-header">
                 <h2 id="detail-equipment-name">Equipment Details</h2>
                 <button class="modal-close">&times;</button>
@@ -153,18 +186,39 @@
                         <span class="detail-value" id="detail-eq-id">-</span>
                     </div>
                     <div class="detail-item">
+                        <span class="detail-label">Location:</span>
+                        <span class="detail-value" id="detail-location">-</span>
+                    </div>
+                    <div class="detail-item">
                         <span class="detail-label">Max Threshold:</span>
                         <span class="detail-value" id="detail-max-temp">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Health Score:</span>
+                        <span class="detail-value" id="detail-health-score">-</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Current Temperature:</span>
                         <span class="detail-value" id="detail-current-temp">-</span>
                     </div>
                     <div class="detail-item">
+                        <span class="detail-label">Overheat Count:</span>
+                        <span class="detail-value" id="detail-overheat-count">-</span>
+                    </div>
+                    <div class="detail-item">
                         <span class="detail-label">Last Updated:</span>
                         <span class="detail-value" id="detail-timestamp">-</span>
                     </div>
                 </div>
+
+                <!-- Feature 1: Trend Graph using Chart.js -->
+                <div class="detail-section">
+                    <h3>Temperature Trend (Last 20 Readings)</h3>
+                    <div class="chart-container">
+                        <canvas id="trend-chart"></canvas>
+                    </div>
+                </div>
+
                 <div class="detail-section">
                     <h3>Recent Readings (Last 10)</h3>
                     <div class="readings-list" id="detail-readings-list">
@@ -184,6 +238,6 @@
     <div id="notification-container" class="notification-container"></div>
 
     <!-- Scripts -->
-    <script src="./main/script.js"></script>
+    <script src="./script_v2.js"></script>
 </body>
 </html>

@@ -1,0 +1,23 @@
+[Unit]
+Description=Heat Stress Detector Sensor Simulator
+After=network.target heat-detector.service
+Requires=heatStressDetector.service
+
+[Service]
+Type=simple
+User=shoiming
+Group=shoiming
+WorkingDirectory=/home/shoiming/heat_stress_detector_app
+
+ExecStartPre=/bin/sleep 30
+ExecStart=/usr/bin/python3 /home/shoiming/heat_stress_detector_app/sensor_sim.py
+
+Restart=always
+RestartSec=10
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sensor-simulator
+
+[Install]
+WantedBy=multi-user.target
