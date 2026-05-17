@@ -90,12 +90,12 @@ def discover_equipment():
                     'threshold': float(eq_threshold),
                     'location': eq_location
                 })
-                print(f"   📍 ID: {eq_id} | Name: {eq_name} | Location: {eq_location} | Max: {eq_threshold}°C")
+                print(f"   ID: {eq_id} | Name: {eq_name} | Location: {eq_location} | Max: {eq_threshold}°C")
         
         return discovered
     
     except ConnectionError:
-        print(f"❌ Connection Error: Cannot reach server at {BASE_URL}")
+        print(f" Connection Error: Cannot reach server at {BASE_URL}")
         print("    Make sure the Flask server is running!")
         return None
     
@@ -104,11 +104,11 @@ def discover_equipment():
         return None
     
     except RequestException as e:
-        print(f"❌ Request Error: {str(e)}")
+        print(f" Request Error: {str(e)}")
         return None
     
     except Exception as e:
-        print(f"❌ Unexpected Error during discovery: {str(e)}")
+        print(f" Unexpected Error during discovery: {str(e)}")
         return None
 
 
@@ -212,19 +212,19 @@ def send_telemetry(equipment_id, temperature):
         return True
     
     except ConnectionError:
-        print(f"   ❌ Connection Error: Cannot reach server")
+        print(f"    Connection Error: Cannot reach server")
         return False
     
     except Timeout:
-        print(f"   ⏰ Timeout: Server took too long to respond")
+        print(f"    Timeout: Server took too long to respond")
         return False
     
     except RequestException as e:
-        print(f"   ❌ Request Error: {str(e)}")
+        print(f"    Request Error: {str(e)}")
         return False
     
     except Exception as e:
-        print(f"   ❌ Unexpected Error: {str(e)}")
+        print(f"    Unexpected Error: {str(e)}")
         return False
 
 
@@ -241,7 +241,7 @@ def simulation_loop():
     try:
         while True:
             cycle_count += 1
-            print(f"🔄 Cycle #{cycle_count} - {get_timestamp()}")
+            print(f" Cycle #{cycle_count} - {get_timestamp()}")
             print("-" * 80)
             
             success_count = 0
@@ -264,10 +264,10 @@ def simulation_loop():
                 if send_telemetry(eq_id, new_temp):
                     print(f"   {status_emoji} {trend_emoji} [{state['name']}] "
                           f"{new_temp}°C (Δ{new_temp - old_temp:+.2f}°C) "
-                          f"→ Threshold: {state['threshold']}°C ✅")
+                          f"→ Threshold: {state['threshold']}°C ")
                     success_count += 1
                 else:
-                    print(f"   ⚠️  [{state['name']}] Failed to send telemetry")
+                    print(f"     [{state['name']}] Failed to send telemetry")
                     fail_count += 1
             
             # Summary
@@ -278,8 +278,8 @@ def simulation_loop():
             time.sleep(LOOP_INTERVAL)
     
     except KeyboardInterrupt:
-        print("\n\n⛔ Simulation stopped by user (Ctrl+C)")
-        print("👋 Shutting down gracefully...")
+        print("\n\n Simulation stopped by user (Ctrl+C)")
+        print(" Shutting down gracefully...")
         sys.exit(0)
 
 
@@ -291,8 +291,8 @@ def main():
     equipment = discover_equipment()
     
     if not equipment:
-        print("\n❌ Failed to discover equipment. Exiting...")
-        print("💡 Troubleshooting:")
+        print("\n Failed to discover equipment. Exiting...")
+        print(" Troubleshooting:")
         print("   1. Ensure Flask server is running at http://10.57.23.226:5000")
         print("   2. Check if equipment exists in database")
         print("   3. Verify network connectivity")
