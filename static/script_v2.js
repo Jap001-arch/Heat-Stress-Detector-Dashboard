@@ -1,16 +1,3 @@
-/**
- * Heat Stress Detector v2.0 - Advanced Frontend JavaScript
- * Features:
- *   1. Chart.js historical trend graphs
- *   2. Rapid heating alerts with visual indicators
- *   3. Health score display with color coding
- *   4. CSV export functionality
- *   5. Equipment location tags
- *   6. Real-time updates with enhanced data
- * 
- * CRITICAL: All fetch() calls use hardcoded base URL: http://10.57.23.226:5000
- */
-
 // ==================== CONFIGURATION ====================
 
 /**
@@ -18,8 +5,8 @@
  * The API base URL is explicitly hardcoded to the Linux VM IP.
  * Do NOT use localhost, 127.0.0.1, or relative paths.
  */
-const API_BASE = 'http://10.57.23.226:5000/api';
-const API_EXPORT = 'http://10.57.23.226:5000/api/export';
+const API_BASE = 'http://your_ip_address:5000/api';
+const API_EXPORT = 'http://your_ip_address:5000/api/export';
 
 const POLL_INTERVAL = 3000;               // Poll every 3 seconds
 const NOTIFICATION_TIMEOUT = 4000;        // Show notifications for 4 seconds
