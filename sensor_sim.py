@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    🌡️  HEAT STRESS DETECTOR - SENSOR SIMULATOR 🌡️           ║
-║                                                                              ║
-║  Simulates a fleet of IoT temperature sensors for testing purposes           ║
-║  Author: Heat Stress Detection System                                        ║
-║  Version: 1.0                                                                ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-"""
 
 import requests
 import time
@@ -16,7 +7,7 @@ import sys
 from datetime import datetime
 from requests.exceptions import ConnectionError, Timeout, RequestException
 
-# 🚨 CRITICAL: Flask server base URL
+# CRITICAL: Flask server base URL
 BASE_URL = "http://10.57.23.226:5000"
 EQUIPMENT_ENDPOINT = f"{BASE_URL}/api/equipment"
 TELEMETRY_ENDPOINT = f"{BASE_URL}/api/telemetry"
@@ -35,11 +26,11 @@ equipment_states = {}
 def print_banner():
     """Display startup banner"""
     print("\n" + "="*80)
-    print("🌡️  HEAT STRESS DETECTOR - IoT SENSOR SIMULATOR".center(80))
+    print("  HEAT STRESS DETECTOR - IoT SENSOR SIMULATOR".center(80))
     print("="*80)
-    print(f"🎯 Target Server: {BASE_URL}")
-    print(f"⏱️  Update Interval: {LOOP_INTERVAL} seconds")
-    print(f"🌡️  Temperature Range: {MIN_TEMP}°C - {MAX_TEMP}°C")
+    print(f" Target Server: {BASE_URL}")
+    print(f"  Update Interval: {LOOP_INTERVAL} seconds")
+    print(f"  Temperature Range: {MIN_TEMP}°C - {MAX_TEMP}°C")
     print("="*80 + "\n")
 
 
@@ -53,7 +44,7 @@ def discover_equipment():
     Auto-discovery: Fetch all equipment from the Flask API
     Returns: List of equipment dictionaries or None on failure
     """
-    print(f"🔍 [{get_timestamp()}] Discovering equipment from server...")
+    print(f" [{get_timestamp()}] Discovering equipment from server...")
     
     try:
         response = requests.get(EQUIPMENT_ENDPOINT, timeout=10)
@@ -79,10 +70,10 @@ def discover_equipment():
             equipment_list = data
         
         if not equipment_list:
-            print("⚠️  No equipment found on the server!")
+            print("  No equipment found on the server!")
             return None
         
-        print(f"✅ Successfully discovered {len(equipment_list)} equipment(s):")
+        print(f" Successfully discovered {len(equipment_list)} equipment(s):")
         
         discovered = []
         for eq in equipment_list:
@@ -105,11 +96,11 @@ def discover_equipment():
     
     except ConnectionError:
         print(f"❌ Connection Error: Cannot reach server at {BASE_URL}")
-        print("   💡 Make sure the Flask server is running!")
+        print("    Make sure the Flask server is running!")
         return None
     
     except Timeout:
-        print(f"⏰ Timeout Error: Server took too long to respond")
+        print(f" Timeout Error: Server took too long to respond")
         return None
     
     except RequestException as e:
@@ -127,7 +118,7 @@ def initialize_equipment_states(equipment_list):
     """
     global equipment_states
     
-    print(f"\n🎲 Initializing random starting temperatures...")
+    print(f"\n Initializing random starting temperatures...")
     
     for eq in equipment_list:
         eq_id = eq['id']
@@ -142,9 +133,9 @@ def initialize_equipment_states(equipment_list):
             'trend': 'stable'  # stable, rising, falling
         }
         
-        print(f"   🌡️  {eq['name']}: {starting_temp}°C")
+        print(f"     {eq['name']}: {starting_temp}°C")
     
-    print(f"✅ Initialized {len(equipment_states)} sensor(s)\n")
+    print(f" Initialized {len(equipment_states)} sensor(s)\n")
 
 
 def simulate_temperature_change(current_temp, threshold):
@@ -241,7 +232,7 @@ def simulation_loop():
     """Main simulation loop - continuously update temperatures"""
     global equipment_states
     
-    print("🚀 Starting continuous telemetry simulation...")
+    print("   Starting continuous telemetry simulation...")
     print("   Press Ctrl+C to stop\n")
     print("="*80 + "\n")
     
@@ -318,5 +309,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"\n💥 Fatal Error: {str(e)}")
+        print(f"\n Fatal Error: {str(e)}")
         sys.exit(1)
