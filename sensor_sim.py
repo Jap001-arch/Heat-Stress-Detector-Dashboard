@@ -8,7 +8,7 @@ from datetime import datetime
 from requests.exceptions import ConnectionError, Timeout, RequestException
 
 # CRITICAL: Flask server base URL
-BASE_URL = "http://10.57.23.226:5000"
+BASE_URL = "http://your_ip_address:5000"
 EQUIPMENT_ENDPOINT = f"{BASE_URL}/api/equipment"
 TELEMETRY_ENDPOINT = f"{BASE_URL}/api/telemetry"
 
