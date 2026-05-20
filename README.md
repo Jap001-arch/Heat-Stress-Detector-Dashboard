@@ -12,11 +12,7 @@ heat-stress-detector/
 ├── app_v2.py                                    # Flask backend application
 ├── sensor_sim.py                                # Temp Sensor Simulator
 ├── allInOne.sql                                 # MySQL database schema
-├── templates/
-│   └── heat_stress_detector_v2.html             # Main dashboard HTML
-└── static/
-    ├── style_v2.css                             # Professional dark theme CSS
-    └── script.js                                # Real-time dashboard JavaScript
+├── heat_stress_detector_v2.html                 # Main dashboard HTML
 ```
 
 ---
