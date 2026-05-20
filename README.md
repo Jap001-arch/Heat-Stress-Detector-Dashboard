@@ -56,7 +56,7 @@ sudo apt install openssh-server
 
 Connect to the server remotely:
 ```bash
-ssh shoiming@our_server_ip
+ssh username@our_server_ip
 ```
 
 ---
